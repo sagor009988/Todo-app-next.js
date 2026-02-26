@@ -1,5 +1,8 @@
-import { MongoClient, ServerApiVersion } from "mongodb";
+import { MongoClient } from "mongodb";
 
-const client = new MongoClient(process.env.MONGO_URI, {});
+const uri= "mongodb+srv://todos:todo123@cluster0.kmm909o.mongodb.net/?appName=Cluster0"
 
+
+const client = new MongoClient(uri);
+  
 export default client;
