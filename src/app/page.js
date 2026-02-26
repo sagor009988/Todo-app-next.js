@@ -8,8 +8,9 @@ const Page = () => {
   const [newTodo, setNewTodo] = useState("");
   const [editId, setEditId] = useState(null);
   const [editTitle, setEditTitle] = useState("");
-  const [modalMessage, setModalMessage] = useState("");
-  const [showModal, setShowModal] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastType, setToastType] = useState("success");
+  const [showToast, setShowToast] = useState(false);
 
   const fetchTodos = async () => {
     try {
@@ -29,10 +30,11 @@ const Page = () => {
     fetchTodos();
   }, []);
 
-  const openModal = (message) => {
-    setModalMessage(message);
-    setShowModal(true);
-    setTimeout(() => setShowModal(false), 2000);
+  const showToastMessage = (message, type = "success") => {
+    setToastMessage(message);
+    setToastType(type);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 2500);
   };
 
   const handleAdd = async () => {
@@ -46,7 +48,7 @@ const Page = () => {
       if (!res.ok) throw new Error("Failed to add todo");
       setNewTodo("");
       fetchTodos();
-      openModal("Todo added successfully!");
+      showToastMessage("Todo added successfully!", "success");
     } catch (error) {
       console.error(error);
     }
@@ -61,7 +63,7 @@ const Page = () => {
       });
       if (!res.ok) throw new Error("Failed to delete todo");
       fetchTodos();
-      openModal("Todo deleted successfully!");
+      showToastMessage("Todo deleted successfully!", "error");
     } catch (error) {
       console.error(error);
     }
@@ -84,7 +86,7 @@ const Page = () => {
       setEditId(null);
       setEditTitle("");
       fetchTodos();
-      openModal("Todo updated successfully!");
+      showToastMessage("Todo updated successfully!", "success");
     } catch (error) {
       console.error(error);
     }
@@ -173,10 +175,14 @@ const Page = () => {
         </div>
       </div>
 
-      {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white dark:bg-gray-700 p-5 rounded shadow-lg text-center">
-            <p className="text-lg font-semibold">{modalMessage}</p>
+      {showToast && (
+        <div className="fixed top-5 right-5 z-50">
+          <div
+            className={`px-4 py-2 rounded shadow-lg text-white font-semibold ${
+              toastType === "success" ? "bg-green-500" : "bg-red-500"
+            }`}
+          >
+            {toastMessage}
           </div>
         </div>
       )}
